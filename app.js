@@ -12,7 +12,7 @@ var app = express();
 app.use(defaultRoute);
 app.use(slidRoute);
 app.use("/admin", express.static(path.join(__dirname, "public/admin")));
-app.use("/watch", express.static(path.join(__dirname, "public/watch")));
+app.use("/login", express.static(path.join(__dirname, "public/login")));
 
 // init server
 var server = http.createServer(app);
