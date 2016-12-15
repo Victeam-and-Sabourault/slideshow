@@ -4,13 +4,18 @@ eventCrtFnt.$inject = ['$scope', '$http', 'factory'];
 
 function eventCrtFnt($scope, $http, factory) {
     $scope.presentations = [];
-    $http.get('localhost:1337/slids').then(
-        (data, status, header, config) => {
-            this.presentations = data;
+    $http.get('/slids').then(
+        (res) => {
+            this.presentations = res.data;
             $scope.currentPresentation = this.presentations[0];
+            console.log($scope.currentPresentation);
         },
         (data, status, header, config) => {
-
+            console.log('error');
         }
     );
+
+    $scope.newSlide = () => {
+        $scope.currentPresentation.slidArray.push(factory.slidCreation('Test', 'toto'));
+    };
 }

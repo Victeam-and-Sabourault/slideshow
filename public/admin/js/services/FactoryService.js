@@ -4,6 +4,7 @@ contentType.IMG_B64="IMG_B64";
 
 angular.module('factoryServices', []).factory('factory',factoryFnc);
 
+
 function factoryFnc() { 
     var factory = {
         generateUUID,
@@ -26,7 +27,11 @@ function factoryFnc() {
         // TODO
     }
     function slidCreation(title,txt){ 
-        // TODO
+        return {
+            id: generateUUID(),
+            title: title,
+            txt: txt
+        };
     }
 
     function presentationCreation(title,description){ 
