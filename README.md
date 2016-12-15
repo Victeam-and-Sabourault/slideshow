@@ -1,2 +1,2 @@
-# slideshow
+# slideshow-node
 CPE Project
