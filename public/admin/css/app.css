@@ -1,0 +1,16 @@
+.slide-picture {
+    margin: 0;
+    padding: 0;
+    max-width: 20vw;
+    max-height: 20vh;
+}
+
+.slids {
+    list-style-type: none;
+}
+
+.slide-content {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
