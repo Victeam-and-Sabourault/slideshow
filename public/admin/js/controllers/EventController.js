@@ -16,11 +16,13 @@ function eventCrtFnt($scope, $http, factory) {
     );
 
     $scope.newSlide = () => {
-        $scope.currentPresentation.slidArray.push(factory.slidCreation('Test', 'toto'));
+        $scope.currentSlide = factory.slidCreation($scope.currentPresentation.title, 'toto');
+        $scope.currentPresentation.slidArray.push($scope.currentSlide);
     };
 
     $scope.selectCurrentSlid = (slide) => { 
         $scope.currentSlide=slide;
+        console.log('selected');
     };
 
     $scope.isSlidContentEmpty = (slid) => { 

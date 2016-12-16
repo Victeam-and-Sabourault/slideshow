@@ -36,26 +36,36 @@
                 </div>
                 <ul class="slids">
                     <li class="slide" ng-repeat="slide in currentPresentation.slidArray">
-                        <h2>{{slide.title }}</h2>
+                        <h2>{{ slide.title }}</h2>
                         <ul class="slide-content">
                             <li ng-repeat="content in slide.contentMap">
-                                <img ng-click="selectCurrentSlid" class="slide-picture" ng-src="/uploads/{{ content }}.png">
+                                <img ng-click="selectCurrentSlid(slide)" class="slide-picture" ng-src="/uploads/{{ content }}.png">
                             </li>
                         </ul>
                     </li>
                 </ul>
-                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 zeroReffullScreenHeight">
+            </div>
+
+            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 zeroReffullScreenHeight">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 fullScreenHeight">
                         <div class="form-group">
-                            // TODO DISPLAY CURRENT TITLE AND DESCRIPTION (EDITION)
+                            <h1>{{ currentSlide.title }}</h1>
+                            <p>{{ currentSlide.txt }}</p>
                         </div>
-                        // TODO DISPLAY CONTENT IMAGE
+                        <ul ng-if="currentSlide.contentMap" class="slide-content">
+                            <li ng-repeat="content in currentSlide.contentMap">
+                                <img ng-src="/uploads/{{ content }}.png">
+                            </li>
+                        </ul>
+                        <p ng-if="! currentSlide.contentMap">
+                            No content for this slide
+                        </p>
                     </div>
                 </div>
-            </div>
+
         </div> 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
