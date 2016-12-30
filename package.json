@@ -25,7 +25,8 @@
   "homepage": "https://github.com/Victeam-and-Sabourault/slideshow-node#readme",
   "dependencies": {
     "express": "^4.14.0",
-    "multer": "^1.2.1"
+    "multer": "^1.2.1",
+    "socket.io": "^1.7.2"
   },
   "port": 1337
 }

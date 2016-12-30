@@ -1,14 +1,17 @@
 // app.js
-var express = require("express");
-var http = require("http");
-var path = require("path");
+const express = require("express");
+const http = require("http");
+const path = require("path");
 
-var CONFIG = require("./config.json");
+const CONFIG = require("./config.json");
 
-var defaultRoute = require('./app/routes/default.route');
-var slidRoute = require('./app/routes/slid.router');
+const IOController = require('./app/controllers/io.controller');
+const defaultRoute = require('./app/routes/default.route');
+const slidRoute = require('./app/routes/slid.router');
 
-var app = express();
+let IOCtrl = new IOController();
+let app = express();
+
 app.use(defaultRoute);
 app.use(slidRoute);
 app.use("/admin", express.static(path.join(__dirname, "public/admin")));
@@ -16,7 +19,8 @@ app.use("/login", express.static(path.join(__dirname, "public/login")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // init server
-var server = http.createServer(app);
+let server = http.createServer(app);
+IOCtrl.listen(server);
 server.listen(CONFIG.port);
-process.env.CONFIG = JSON.stringify(CONFIG);
+// process.env.CONFIG = JSON.stringify(CONFIG);
 // var CONFIG = JSON.parse(process.env.CONFIG); ===> TO ACCESS IN MODULES
