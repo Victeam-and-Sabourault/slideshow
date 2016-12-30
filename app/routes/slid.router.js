@@ -1,57 +1,48 @@
-var express = require('express');
-var fs = require('fs');
-var multer = require("multer");
-var path = require("path");
-var slidCtrl = require("../controllers/slid.controller");
-var router = express.Router();
+const express = require('express');
+const fs = require('fs');
+const multer = require("multer");
+const path = require("path");
+const slidCtrl = require("../controllers/slid.controller");
 
-var CONFIG = require("../../config.json");
+let router = express.Router();
 
-var multerMiddleware = multer({ "dest": "../../presentation_content/" });
+const CONFIG = require("../../config.json");  
 
-router.get("/slids", function(request, response) {
-    let listPres = [];
-    fs.readdir(CONFIG.presentationDirectory, (err, files) => {
-        if(err) console.log(err);
+const storage = multer.diskStorage({
+  destination: CONFIG.contentDirectory,
+  filename: function (req, file, cb) {
+    cb(null, utils.generateUUID() + "." + file.originalname.split('.').pop());
+  }
+});
 
-        let filteredLs = files.filter( (file) => path.extname(file) === ".json");
+const upload = multer({ storage: storage});
 
-        let index = 0;
-        filteredLs.forEach(file => {
-            fs.readFile("./"+CONFIG.presentationDirectory+"/"+file, 'utf8',function (err, data) {
-                let jsonData = JSON.parse(data.toString());
-                let pres = {};
-                pres[jsonData.id] = jsonData;
-                listPres.push(pres);
+router.route("/slids")
+    // create slid
+    .post(upload.single("file"), (request, response) => {
+        slidController.create(request.file, (err, data) => {
+            if (err) console.log(err);
+            response.send(err || data);
+        });
+    })
+    // get all slids
+    .get((request, response) => slidController.list(data => response.send(data)));
 
-                if (filteredLs.length === ++index) {
-                    response.send(listPres);
-                }
-            });
+router.route("/slids/:slidId")
+    // get 1 slid
+    .get((request, response) => {
+        slidController.getSlid(request.slidId, (err, data) => {
+            if (err) console.log(err);
+            response.send(err || data);
         });
     });
+
+router.param("slidId", (req, res, next, id) => {
+    req.slidId = id;
+    next();
 });
 
-router.get("/slids/:id", function(request, response) {
-
-        let fileName = path.join("./" + CONFIG.presentationDirectory, request.params.id + ".pres.json");
-
-        fs.readFile(fileName, 'utf8',function (err, data) {
-
-            if (err) console.log(err);
-
-            let jsonData = JSON.parse(data.toString());
-            let pres = {};
-            pres[jsonData.id] = jsonData;
-
-            response.send(pres);
-        });
-
-});
-
-router.post("/slids", (request, response) => slidCtrl.create(request, response));
-
-router.post("/slids/content", multerMiddleware.single("file"), function(request, response) {
+router.post("/slids/content", upload.single("file"), function(request, response) {
     console.log(request);
     console.log(request.file.path); // The full path to the uploaded file
     console.log(request.file.originalname); // Name of the file on the user's computer

@@ -1,6 +1,9 @@
-"use strict";
-let fs = require('fs');
-let CONFIG = require("../../config.json");
+'use strict';
+const fs = require('fs');
+const utils = require('../utils/utils.js');
+
+const slidModel = require('../models/slid.model.js');
+const CONFIG = require('../../config.json');
 
 class SlidController {
 
@@ -8,25 +11,32 @@ class SlidController {
 
     }
 
-    create(request, response) {
-        var body = '';
-        request.on('data', function (data) {
-            body += data;
-            if (body.length > 1e6)
-                request.connection.destroy();
-        });
+    create(file, next) {
+        let model = new slidModel();
+        model.type = utils.getFileType(file.mimetype);
+        model.fileName = file.filename;
+        model.id = model.fileName.split('.')[0];
+        model.title = file.originalname.split('.')[0];
 
-        request.on('end', function () {
-            
-            var post = JSON.parse(body);
-            fs.writeFile("./"+CONFIG.presentationDirectory+"/"+post.id + ".pres.json", JSON.stringify(post), () => {
-                response.send("Présentation Sauvegardé");
+        fs.readdir(CONFIG.contentDirectory, (err, files) => {
+            let file = files.filter((file) => file === model.fileName)[0];
+            fs.readFile(CONFIG.contentDirectory + '/' + file, (err, data) => {
+                if (err) {
+                    next(err);
+                } else {
+                    model.setData(data);
+                    // create a new slid from model
+                    slidModel.create(model, err => {
+                        if (err) next(err);
+                        next("Saved!");    
+                    });
+                }
             });
         });
     }
 
-    read() {
-
+    read(id, next) {
+        slidModel.read(id, next);
     }
 
 }

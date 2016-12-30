@@ -1,6 +1,6 @@
-"use strict";
-let fs = require('fs');
-let CONFIG = require("../../config.json");
+'use strict';
+const fs = require('fs');
+const CONFIG = require("../../config.json");
 
 
 class SlideModel {
