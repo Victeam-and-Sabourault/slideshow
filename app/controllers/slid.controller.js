@@ -1,14 +1,34 @@
 'use strict';
 const fs = require('fs');
-const utils = require('../utils/utils.js');
+const path = require('path');
+const utils = require('../utils/utils');
 
-const slidModel = require('../models/slid.model.js');
+const slidModel = require('../models/slid.model');
 const CONFIG = require('../../config.json');
 
 class SlidController {
 
-    list() {
+    list(next) {
+        let listSlids = {};
+        let nbTotalFiles = -1;
+        let nbFile = 0;
 
+        fs.readdir(CONFIG.contentDirectory, (err, files) => {
+            let extFile = files.filter((file) => path.extname(file) === '.json');
+            let nbTotalFiles = extFile.length;
+
+            for (let i in extFile) {
+                const url = CONFIG.contentDirectory + '/' + extFile[i];
+                fs.readFile(url, (err, data) => {
+                    const fileContent = JSON.parse(data.toString());
+                    listSlids[fileContent.id] = fileContent;
+
+                    if (++nbFile === nbTotalFiles) { // no more files to read
+                        next(listSlids);
+                    }
+                });
+            }
+        });
     }
 
     create(file, next) {
@@ -19,7 +39,7 @@ class SlidController {
         model.title = file.originalname.split('.')[0];
 
         fs.readdir(CONFIG.contentDirectory, (err, files) => {
-            let file = files.filter((file) => file === model.fileName)[0];
+            const file = files.filter((file) => file === model.fileName)[0];
             fs.readFile(CONFIG.contentDirectory + '/' + file, (err, data) => {
                 if (err) {
                     next(err);
