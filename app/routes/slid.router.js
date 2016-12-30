@@ -2,7 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var multer = require("multer");
 var path = require("path");
-
+var slidCtrl = require("../controllers/slid.controller");
 var router = express.Router();
 
 var CONFIG = require("../../config.json");
@@ -49,25 +49,9 @@ router.get("/slids/:id", function(request, response) {
 
 });
 
-router.post("/savePrez", function(request, response) {
-    var body = '';
-    request.on('data', function (data) {
-        body += data;
-        if (body.length > 1e6)
-            request.connection.destroy();
-    });
+router.post("/slids", (request, response) => slidCtrl.create(request, response));
 
-    request.on('end', function () {
-        
-        var post = JSON.parse(body);
-        fs.writeFile("./"+CONFIG.presentationDirectory+"/"+post.id + ".pres.json", JSON.stringify(post), () => {
-            response.send("Présentation Sauvegardé");
-        });
-    });
-    
-});
-
-router.post("/slids", multerMiddleware.single("file"), function(request, response) {
+router.post("/slids/content", multerMiddleware.single("file"), function(request, response) {
     console.log(request);
     console.log(request.file.path); // The full path to the uploaded file
     console.log(request.file.originalname); // Name of the file on the user's computer
