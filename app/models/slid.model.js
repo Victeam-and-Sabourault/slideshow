@@ -22,7 +22,7 @@ class SlidModel {
 
     /* Prend un objet slidModel en paramètre, stocke le contenu de [slid.data] dans le fichier [slid.fileName] et stocke les metadonnées dans un fichier [slidModel.id].meta.json dans le répertoire [CONFIG.contentDirectory]. */
     static create(slide, callback) {
-        if (slide instanceof SlideModel) {
+        if (slide instanceof SlidModel) {
             if (slide.getData() !== null && slide.getData().length > 0 && slide.id !== null) {
                 fs.writeFile(CONFIG.contentDirectory + '/' + slide.id + '.meta.json', JSON.stringify(slide));
                 fs.writeFile(CONFIG.contentDirectory + '/' + slide.fileName, slide.getData());
@@ -31,7 +31,7 @@ class SlidModel {
                 callback('Problem in datas !');
             }
         } else {
-            callback('Not an instance of SlideModel !');
+            callback('Not an instance of SlidModel !');
         }   
     }
 
@@ -41,7 +41,7 @@ class SlidModel {
             fs.readdir(CONFIG.contentDirectory, (err, files) => {
                 let file = files.filter((file) => file === id + '.meta.json')[0];
                 let fileContent = JSON.parse(fs.readFileSync(CONFIG.contentDirectory + '/' + file).toString());
-                let model = new SlideModel();
+                let model = new SlidModel();
                 model.type = fileContent.type;
                 model.id = fileContent.id;
                 model.title = fileContent.title;
