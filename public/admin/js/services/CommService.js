@@ -2,33 +2,31 @@ angular.module('commServices', []).factory('comm',commFnc);
 commFnc.$inject=['$http','$q'];
 
 function commFnc($http,$q ){
+
      var comm = {
          loadImages: loadImages,
          loadPres: loadPres,
          savePres: savePres
      };
    
-   //TODO
    function loadImages(presName,presID) { 
-        // TODO
-        var deferred = $q.defer();
-        setTimeout(() => {
-            deferred.resolve();
-        }, 3000);
-        return deferred.promise;
+       var deferred = $q.defer();
+       $http.get('/resources_list')
+            .then(
+                (data, status, headers, config) => deferred.resolve(data))
+            .catch(
+                (data, status, headers, config) => deferred.reject(status));
+       return deferred.promise;
     }
 
     function loadPres(presName,presID) { 
-        return $http.get(`/slids/${presID}`).then(
-            (res) => {
-                this.presentations = res.data;
-                $scope.currentPresentation = this.presentations[0][Object.keys(this.presentations[0])[0]];
-                console.log($scope.currentPresentation);
-            },
-            (data, status, header, config) => {
-                console.log('error');
-            }
-        );
+        var deferred = $q.defer();
+        $http.get('/loadPres')
+            .then(
+                (data, status, headers, config) => deferred.resolve(data))
+            .catch(
+                (data, status, headers, config) => deferred.reject(status));
+        return deferred.promise;
     }
 
      //TODO

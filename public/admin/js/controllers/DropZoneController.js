@@ -45,7 +45,6 @@
         var available_content=comm.loadImages('test','test');
             available_content.then(
                 function(payload) { 
-                    debugger;
                     $scope.$parent.contentMap.payload = payload;
                     $scope.$parent.contentMap.array=factory.mapToArray(payload);
                 },
