@@ -6,16 +6,15 @@ var contentType={};
     contentType.VIDEO_CUSTOM="VIDEO_CUSTOM";
 
 
-angular.module('factoryServices', []).factory('factory',factoryFnc);
+angular.module('factoryServices', []).factory('factory', factoryFnc);
 
 function factoryFnc(){
      var factory = {
-        generateUUID:       generateUUID,
-         contentCreation:   contentCreation,
-         slidCreation:      slidCreation,
+         generateUUID: generateUUID,
+         contentCreation: contentCreation,
+         slidCreation: slidCreation,
          presentationCreation: presentationCreation,
-         mapToArray:        mapToArray
-         
+         mapToArray: mapToArray
      };
     
     
