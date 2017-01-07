@@ -13,8 +13,9 @@ class IOController {
             socket.emit('connection');
 
             // save socket in a map
-            socket.on('data_comm', message => mapSocket[message.idClient] = socket);
+            socket.on('data_comm', () => this.mapSocket[idClient] = socket);
 
+            // listen to slid event
             socket.on('slidEvent', message => {
                 if (message.CMD !== 'PAUSE') {
                     SlidModel.read(message.PRES_ID, (err, slid) => {
