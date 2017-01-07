@@ -33,7 +33,7 @@ router.route("/slids")
 router.route("/slids/:slidId")
     // get 1 slid
     .get((request, response) => {
-        slidCtrl.getSlid(request.slidId, (err, data) => {
+        slidCtrl.read(request.slidId, (err, data) => {
             if (err) console.log(err);
             response.send(err || data);
         });
