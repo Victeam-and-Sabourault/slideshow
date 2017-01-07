@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const CONFIG = require('../../config.json');
 
-class Utils {
+module.exports = {
 	generateUUID () {
 		var d = new Date().getTime();
 		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -13,7 +13,7 @@ class Utils {
 			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
 		});
 		return uuid;
-	}
+	},
 
 	fileExists (path, callback) {
 		fs.stat(path, (err, stat) => {
@@ -25,7 +25,7 @@ class Utils {
 				}
 			}
 		});
-	}
+	},
 
 	readFileIfExists (path, callback) {
 		this.fileExists(path, err => {
@@ -35,19 +35,19 @@ class Utils {
 				fs.readFile(path, callback);
 			}
 		});
-	}
+	},
 
 	getMetaFilePath (id) {
 		return path.join(CONFIG.contentDirectory, id + ".meta.json");
-	}
+	},
 
 	getDataFilePath (fileName) {
 		return path.join(CONFIG.contentDirectory, fileName);
-	}
+	},
 
 	getNewFileName (id, originalFileName) {
-	return id + '.' + originalFileName.split('.').pop();
-}
+		return id + '.' + originalFileName.split('.').pop();
+	},
 
 	getFileType (fileType) {
 		if (fileType.match("image/*")) {
@@ -56,8 +56,6 @@ class Utils {
 			return "VIDEO_CUSTOM";
 		}
 	}
-}
-
-module.exports = Utils;
+};
 
 

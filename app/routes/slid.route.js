@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
+const utils = require('../utils/utils');
 
 const SlidCtrl = require('../controllers/slid.controller.js');
 
@@ -33,7 +34,6 @@ router.route("/slids")
 router.route("/slids/:slidId")
     // get 1 slid
     .get((request, response) => {
-        console.log("////router :"+request.slidId);
         slidCtrl.read(request.slidId, (err, data) => {
             if (err) console.log(err);
             response.send(err || data);
@@ -45,12 +45,6 @@ router.param("slidId", (req, res, next, id) => {
     next();
 });
 
-router.post("/slids/content", upload.single("file"), function (request, response) {
-    console.log(request);
-    console.log(request.file.path); // The full path to the uploaded file
-    console.log(request.file.originalname); // Name of the file on the user's computer
-    console.log(request.file.mimetype); // Mime type of the file });
-    response.send();
-});
+router.post("/file-upload", upload.single("file"), (request, response) => slidCtrl.upload(request, response));
 
 module.exports = router;

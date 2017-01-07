@@ -64,8 +64,25 @@ class SlidController {
     }
 
     read(id, next) {
-        console.log("////ctrl :"+id);
         slidModel.read(id, next);
+    }
+
+    upload (request, response) {
+        console.log(request);
+        console.log(request.file.path); // The full path to the uploaded file
+        console.log(request.file.originalname); // Name of the file on the user's computer
+        console.log(request.file.mimetype); // Mime type of the file });
+
+        let slid = new slidModel();
+        slid.type = request.file.mimetype;
+        slid.id = request.file.filename.split('.')[0];
+        slid.title = 'CPE < 7k';
+        slid.filename = request.file.filename;
+        fs.readFile(request.file.path, (err, data) => {
+            if (err) console.log(err);
+            slid.setData(data);
+            slidModel.create(slid, () => response.send("File uploaded"));
+        });
     }
 
 }

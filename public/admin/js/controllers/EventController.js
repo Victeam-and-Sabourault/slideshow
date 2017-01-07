@@ -14,29 +14,25 @@ function eventCrtFnt($scope, $log, $window, factory, comm){
     $scope.presentationMap={};
     $scope.presentationMap.payload="";
     
-    var available_content=comm.loadImages('test','test');
-       available_content.then(
-          function(payload) { 
-              $scope.contentMap.payload = payload;
-              $scope.contentMap.array=factory.mapToArray(payload);
-          },
-          function(errorPayload) {
-              $log.error('failure loading movie', errorPayload);
-          });
+    comm.loadImages('test','test')
+       .then(
+            (payload) => { 
+                $scope.contentMap.payload = payload;
+                $scope.contentMap.array=factory.mapToArray(payload);
+            })
+        .catch((errorPayload) => $log.error('failure loading movie', errorPayload));
     
-    var firstPresentation=comm.loadPres('test','test');
-       firstPresentation.then(
-          function(payload) { 
-              $scope.presentationMap.payload= payload;
+    comm.loadPres('test','test')
+        .then(
+            (payload) => { 
+                $scope.presentationMap.payload= payload;
                             
-              for(key in $scope.presentationMap.payload){
-                  $scope.currentPresenation =$scope.presentationMap.payload[key];
-              }
+                for(key in $scope.presentationMap.payload){
+                    $scope.currentPresenation =$scope.presentationMap.payload[key];
+                }
              
-          },
-          function(errorPayload) {
-              $log.error('failure loading movie', errorPayload);
-          });
+          })
+        .catch((errorPayload) => $log.error('failure loading movie', errorPayload));
     
     
     $scope.newSlide=function(){

@@ -1,6 +1,6 @@
 'use strict';
 const fs = require('fs');
-const Utils = require('../utils/utils.js');
+const utils = require('../utils/utils');
 const CONFIG = require('../../config.json');
 
 
@@ -24,9 +24,9 @@ class SlidModel {
     /* Prend un objet slidModel en paramètre, stocke le contenu de [slid.data] dans le fichier [slid.fileName] et stocke les metadonnées dans un fichier [slidModel.id].meta.json dans le répertoire [CONFIG.contentDirectory]. */
     static create(slide, callback) {
         if (slide instanceof SlidModel) {
-            if (slide.getData() !== null && slide.getData().length > 0 && slide.id !== null) {
+            if (slide.getData() != null && slide.getData().length > 0 && slide.id != null) {
                 fs.writeFile(CONFIG.contentDirectory + '/' + slide.id + '.meta.json', JSON.stringify(slide));
-                fs.writeFile(CONFIG.contentDirectory + '/' + slide.fileName, slide.getData());
+                // fs.writeFile(CONFIG.contentDirectory + '/' + slide.fileName, slide.getData());
                 callback();
             } else {
                 callback('Problem in datas !');
@@ -38,22 +38,7 @@ class SlidModel {
 
     /* Prend un id en paramètre et retourne l’objet slidModel lu depuis le fichier [slid.id].meta.json */ 
     static read(id, callback) {
-        console.log("////model :"+id);
         if (id !== null) {
-            // fs.readdir(CONFIG.contentDirectory, (err, files) => {
-            //     let file = files.filter((file) => file === id + '.meta.json')[0];
-            //     console.log("////model : "+file);
-            //     let fileContent = JSON.parse(fs.readFileSync(CONFIG.contentDirectory + '/' + file).toString());
-            //     let model = new SlidModel();
-            //     model.type = fileContent.type;
-            //     model.id = fileContent.id;
-            //     model.title = fileContent.title;
-            //     model.fileName = fileContent.fileName;
-
-            //     callback(null, model);
-            // });
-            let utils = new Utils();
-            console.log(CONFIG.contentDirectory + "/" + id + '.meta.json');
             utils.readFileIfExists(CONFIG.contentDirectory + "/" + id + '.meta.json', (err, data) => {
                 const fileContent = JSON.parse(data.toString());
                 let model = new SlidModel();

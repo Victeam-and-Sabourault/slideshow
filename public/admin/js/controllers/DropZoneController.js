@@ -42,15 +42,13 @@
         
       myDropzone.on("queuecomplete", function(progress) {
         myDropzone.removeAllFiles(true);
-        var available_content=comm.loadImages('test','test');
-            available_content.then(
-                function(payload) { 
+        comm.loadImages('test','test')
+            .then(
+                (payload) => { 
                     $scope.$parent.contentMap.payload = payload;
                     $scope.$parent.contentMap.array=factory.mapToArray(payload);
-                },
-                function(errorPayload) {
-                    $log.error('failure loading movie', errorPayload);
-                });
+                })
+            .catch((errorPayload) => $log.error('failure loading movie', errorPayload));
       });
         
 
