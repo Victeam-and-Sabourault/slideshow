@@ -9,7 +9,7 @@ function commFnc($http,$q ){
          savePres: savePres
      };
    
-   function loadImages(presName,presID) { 
+   function loadImages(presID) { 
        var deferred = $q.defer();
        $http.get('/slids/'+presID)
             .then(
@@ -19,7 +19,7 @@ function commFnc($http,$q ){
        return deferred.promise;
     }
 
-    function loadPres(presName,presID) { 
+    function loadPres(presID) { 
         var deferred = $q.defer();
         $http.get('/loadPres/'+presID)
             .then(
