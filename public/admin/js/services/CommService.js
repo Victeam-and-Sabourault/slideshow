@@ -3,10 +3,9 @@ commFnc.$inject=['$http','$q'];
 
 function commFnc($http,$q ){
      var comm = {
-         loadImages:       loadImages,
-         loadPres:          loadPres,
-         savePres:      savePres
-         
+         loadImages: loadImages,
+         loadPres: loadPres,
+         savePres: savePres
      };
    
    //TODO
@@ -20,17 +19,29 @@ function commFnc($http,$q ){
     }
 
     function loadPres(presName,presID) { 
-        $http.get(`/slids/${presID}`).then(
-        (res) => {
-            this.presentations = res.data;
-            $scope.currentPresentation = this.presentations[0][Object.keys(this.presentations[0])[0]];
-            console.log($scope.currentPresentation);
-        },
-        (data, status, header, config) => {
-            console.log('error');
-        }
-    );
+        return $http.get(`/slids/${presID}`).then(
+            (res) => {
+                this.presentations = res.data;
+                $scope.currentPresentation = this.presentations[0][Object.keys(this.presentations[0])[0]];
+                console.log($scope.currentPresentation);
+            },
+            (data, status, header, config) => {
+                console.log('error');
+            }
+        );
     }
+
+     //TODO
+   function savePres(pres) { 
+        // TODO
+        var deferred = $q.defer();
+        setTimeout(() => {
+            deferred.resolve();
+        }, 3000);
+        return deferred.promise;
+    }
+
+    return comm;
    
 }
     

@@ -17,6 +17,7 @@ function eventCrtFnt($scope, $log, $window, factory, comm){
     var available_content=comm.loadImages('test','test');
        available_content.then(
           function(payload) { 
+              debugger;
               $scope.contentMap.payload = payload;
               $scope.contentMap.array=factory.mapToArray(payload);
           },
@@ -62,6 +63,7 @@ function eventCrtFnt($scope, $log, $window, factory, comm){
     
     $scope.onDropComplete=function(data,evt){
         if($scope.currentSlide != undefined){
+            debugger;
             $scope.currentSlide.contentMap[1]=data.id;
             //needed to inform angular that a change occurred on the current variable, this fire an event change
              $scope.$apply()
@@ -70,12 +72,14 @@ function eventCrtFnt($scope, $log, $window, factory, comm){
     }
     
     $scope.getCurrentContent=function(){
+        debugger;
         if(1  in  $scope.currentSlide.contentMap){
             return $scope.currentSlide.contentMap[1];
         }
     }
     
     $scope.isSlidContentEmpty=function(slid){
+        debugger;
         if(slid.contentMap[1]== undefined){
             return true;
         }
