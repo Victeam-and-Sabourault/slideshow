@@ -46,10 +46,10 @@ router.route("/slids")
 
     router.post("/slids/content", upload.single("file"), function(request, response) {
         console.log(request);
-    console.log(request.file.path); // The full path to the uploaded file
-    console.log(request.file.originalname); // Name of the file on the user's computer
-    console.log(request.file.mimetype); // Mime type of the file });
-    response.send();
+        console.log(request.file.path); // The full path to the uploaded file
+        console.log(request.file.originalname); // Name of the file on the user's computer
+        console.log(request.file.mimetype); // Mime type of the file });
+        response.send();
 });
 
 module.exports = router;
