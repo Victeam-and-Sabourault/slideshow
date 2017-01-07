@@ -19,14 +19,18 @@ class SlidController {
 
             for (let i in extFile) {
                 const url = CONFIG.contentDirectory + '/' + extFile[i];
-                fs.readFile(url, (err, data) => {
-                    const fileContent = JSON.parse(data.toString());
-                    listSlids[fileContent.id] = fileContent;
+                if (fs.existsSync(url)) {
+                    fs.readFile(url, (err, data) => {
+                        const fileContent = JSON.parse(data.toString());
+                        listSlids[fileContent.id] = fileContent;
 
-                    if (++nbFile === nbTotalFiles) { // no more files to read
-                        next(listSlids);
-                    }
-                });
+                        if (++nbFile === nbTotalFiles) { // no more files to read
+                            next(listSlids);
+                        }
+                    });
+                } else {
+                    next({});
+                }
             }
         });
     }
@@ -40,22 +44,27 @@ class SlidController {
 
         fs.readdir(CONFIG.contentDirectory, (err, files) => {
             const file = files.filter((file) => file === model.fileName)[0];
-            fs.readFile(CONFIG.contentDirectory + '/' + file, (err, data) => {
-                if (err) {
-                    next(err);
-                } else {
-                    model.setData(data);
-                    // create a new slid from model
-                    slidModel.create(model, err => {
-                        if (err) next(err);
-                        next("Saved!");    
-                    });
-                }
-            });
+            if (fs.existsSync(CONFIG.contentDirectory + '/' + file)) {
+                fs.readFile(CONFIG.contentDirectory + '/' + file, (err, data) => {
+                    if (err) {
+                        next(err);
+                    } else {
+                        model.setData(data);
+                        // create a new slid from model
+                        slidModel.create(model, err => {
+                            if (err) next(err);
+                            next("Saved!");
+                        });
+                    }
+                });
+            } else {
+                next({});
+            }
         });
     }
 
     read(id, next) {
+        console.log("////ctrl :"+id);
         slidModel.read(id, next);
     }
 

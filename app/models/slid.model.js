@@ -1,5 +1,6 @@
 'use strict';
 const fs = require('fs');
+const Utils = require('../utils/utils.js');
 const CONFIG = require('../../config.json');
 
 
@@ -37,18 +38,32 @@ class SlidModel {
 
     /* Prend un id en paramètre et retourne l’objet slidModel lu depuis le fichier [slid.id].meta.json */ 
     static read(id, callback) {
+        console.log("////model :"+id);
         if (id !== null) {
-            fs.readdir(CONFIG.contentDirectory, (err, files) => {
-                let file = files.filter((file) => file === id + '.meta.json')[0];
-                let fileContent = JSON.parse(fs.readFileSync(CONFIG.contentDirectory + '/' + file).toString());
+            // fs.readdir(CONFIG.contentDirectory, (err, files) => {
+            //     let file = files.filter((file) => file === id + '.meta.json')[0];
+            //     console.log("////model : "+file);
+            //     let fileContent = JSON.parse(fs.readFileSync(CONFIG.contentDirectory + '/' + file).toString());
+            //     let model = new SlidModel();
+            //     model.type = fileContent.type;
+            //     model.id = fileContent.id;
+            //     model.title = fileContent.title;
+            //     model.fileName = fileContent.fileName;
+
+            //     callback(null, model);
+            // });
+            let utils = new Utils();
+            console.log(CONFIG.contentDirectory + "/" + id + '.meta.json');
+            utils.readFileIfExists(CONFIG.contentDirectory + "/" + id + '.meta.json', (err, data) => {
+                const fileContent = JSON.parse(data.toString());
                 let model = new SlidModel();
                 model.type = fileContent.type;
                 model.id = fileContent.id;
                 model.title = fileContent.title;
                 model.fileName = fileContent.fileName;
-
                 callback(null, model);
             });
+
         } else {
             callback('Problem in datas !', null);
         }
