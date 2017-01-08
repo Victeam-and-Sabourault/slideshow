@@ -3,11 +3,9 @@ const multer = require('multer');
 const utils = require('../utils/utils');
 
 const SlidCtrl = require('../controllers/slid.controller.js');
-
-let slidCtrl = new SlidCtrl();
-let router = express.Router();
-
 const CONFIG = require('../../config.json');
+
+let router = express.Router();
 
 const storage = multer.diskStorage({
     destination: CONFIG.contentDirectory,
@@ -21,18 +19,18 @@ const upload = multer({ storage: storage });
 router.route("/slids")
     // create slid
     .post(upload.single("file"), (request, response) => {
-        slidCtrl.create(request.file, (err, data) => {
+        SlidCtrl.create(request.file, (err, data) => {
             if (err) console.log(err);
             response.send(err || data);
         });
     })
     // get all slids
-    .get((request, response) => slidCtrl.list(data => response.send(data)));
+    .get((request, response) => SlidCtrl.list(data => response.send(data)));
 
 router.route("/slids/:slidId")
     // get 1 slid
     .get((request, response) => {
-        slidCtrl.read(request.slidId, (err, data) => {
+        SlidCtrl.read(request.slidId, (err, data) => {
             if (err) console.log(err);
             response.send(err || data);
         });
@@ -41,7 +39,7 @@ router.route("/slids/:slidId")
 router.route('/pres/:presId/slid/:slidId/upload/:fileId')
     // update content
     .post((request, response) => {
-        slidCtrl.updateImage(request.presId, request.slidId, request.fileId, (err, data) => {
+        SlidCtrl.updateImage(request.presId, request.slidId, request.fileId, (err, data) => {
             if (err) console.log(err);
             response.send(err || data);
         });
@@ -60,6 +58,6 @@ router.param("fileId", (req, res, next, id) => {
     next();
 });
 
-router.post("/file-upload", upload.single("file"), (request, response) => slidCtrl.upload(request, response));
+router.post("/file-upload", upload.single("file"), (request, response) => SlidCtrl.upload(request, response));
 
 module.exports = router;

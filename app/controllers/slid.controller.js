@@ -8,7 +8,7 @@ const CONFIG = require('../../config.json');
 
 class SlidController {
 
-    list(next) {
+    static list(next) {
         let listSlids = {};
         let nbTotalFiles = -1;
         let nbFile = 0;
@@ -35,7 +35,7 @@ class SlidController {
         });
     }
 
-    create(file, next) {
+    static create(file, next) {
         let model = new slidModel();
         model.type = utils.getFileType(file.mimetype);
         model.fileName = file.filename;
@@ -63,7 +63,7 @@ class SlidController {
         });
     }
 
-    updateImage(presId, slidId, file, next) {
+    static updateImage(presId, slidId, file, next) {
         console.log(file);
         if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + presId + ".pres.json")) {
             fs.readFile("./" + CONFIG.presentationDirectory + "/" + presId + ".pres.json", 'utf8', function (err, data) {
@@ -83,11 +83,11 @@ class SlidController {
         }
     }
 
-    read(id, next) {
+    static read(id, next) {
         slidModel.read(id, next);
     }
 
-    upload (request, response) {
+    static upload (request, response) {
         let slid = new slidModel();
         slid.type = request.file.mimetype;
         slid.id = request.file.filename.split('.')[0];

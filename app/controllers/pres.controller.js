@@ -6,11 +6,9 @@ const path = require('path');
 const SlidCtrl = require('./slid.controller');
 const CONFIG = require('../../config.json');
 
-let slidCtrl = new SlidCtrl();
-
 class PresController {
 
-    list(next) {
+    static list(next) {
         let listPres = [];
         fs.readdir(CONFIG.presentationDirectory, (err, files) => {
             if (err) console.log(err);
@@ -33,7 +31,7 @@ class PresController {
         });
     }
 
-    read(id, next) {
+    static read(id, next) {
         if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + id + ".pres.json")) {
             fs.readFile("./" + CONFIG.presentationDirectory + "/" + id + ".pres.json", 'utf8', function (err, data) {
                 if (err) console.log(err);
@@ -44,7 +42,7 @@ class PresController {
         }
     }
 
-    create(request, response) {
+    static create(request, response) {
         let body = '';
         request.on('data', function (data) {
             body += data;
@@ -61,14 +59,14 @@ class PresController {
         });
     }
 
-    getAllImages(id) {
+    static getAllImages(id, next) {
         if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + id + ".pres.json")) {
             let listUploads = {};
             fs.readFile("./" + CONFIG.presentationDirectory + "/" + id + ".pres.json", 'utf8', function (err, data) {
-                listSlids = JSON.parse(data).slidArray;
+                const listSlids = JSON.parse(data).slidArray;
                 let index = 0;
                 for (let slid in listSlids) {
-                    slidCtrl.read(listSlids[slid].contentMap[1], (err, data) => {
+                    SlidCtrl.read(listSlids[slid].contentMap[1], (err, data) => {
                         if (err) console.log(err);
                         listUploads[listSlids[slid].id] = data;
                         if (++index == listSlids.length) next(listUploads);
@@ -82,3 +80,5 @@ class PresController {
 
 
 }
+
+module.exports = PresController;

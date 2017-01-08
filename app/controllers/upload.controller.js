@@ -1,11 +1,13 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 
 const CONFIG = require('../../config.json');
 
 class UploadController {
-    list(next) {
+
+    static list(next) {
         fs.readdir('./' + CONFIG.contentDirectory, (err, files) => {
             if (err) console.log(err);
             let listUploads = [];
@@ -21,4 +23,7 @@ class UploadController {
             });
         });
     }
+
 } 
+
+module.exports = UploadController;
