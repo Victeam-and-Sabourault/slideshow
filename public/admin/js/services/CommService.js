@@ -11,7 +11,7 @@ function commFnc($http,$q ){
    
    function loadImages(presID) { 
        var deferred = $q.defer();
-       $http.get('/slids/'+presID)
+       $http.get('/pres/'+presID+'/images')
             .then(
                 (data, status, headers, config) => deferred.resolve(data))
             .catch(

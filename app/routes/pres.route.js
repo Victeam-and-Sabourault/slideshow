@@ -3,6 +3,9 @@ const fs = require('fs');
 const CONFIG = require('../../config.json');
 const path = require('path');
 let router = express.Router();
+const SlidCtrl = require('../controllers/slid.controller.js');
+
+let slidCtrl = new SlidCtrl();
 
 router.get("/loadPres", function (request, response) {
     let listPres = [];
@@ -38,6 +41,27 @@ router.route("/loadPres/:presId")
             response.send("ERROR FILE UNEXISTING");
         }
 
+    });
+
+router.route('/pres/:presId/images')
+    // get all images from a pres
+    .get((request, response) => {
+        if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + request.presId + ".pres.json")) {
+            let listUploads = {};
+            fs.readFile("./" + CONFIG.presentationDirectory + "/" + request.presId + ".pres.json", 'utf8', function (err, data) {
+                listSlids = JSON.parse(data).slidArray;
+                let index = 0;
+                for (let slid in listSlids) {
+                    slidCtrl.read(listSlids[slid].contentMap[1], (err, data) => {
+                        if (err) console.log(err);
+                        listUploads[listSlids[slid].id] = data;
+                        if (++index == listSlids.length) response.send(listUploads);
+                    });
+                }
+            });
+        } else {
+            response.send("ERROR FILE UNEXISTING");
+        }
     });
 
 router.post("/savePres", function (request, response) {

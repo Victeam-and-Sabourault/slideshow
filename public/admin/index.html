@@ -37,8 +37,8 @@
                         Slid Zone
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 slidZone" ng-class="{'slidZoneSelected': slid.id == currentSlide.id, 'hide':slid.contentMap[1]==undefined}">
-                        <img ng-src="{{contentMap.payload[slid.contentMap[1]].fileName}}" alt="{{contentMap.payload[slid.contentMap[1]].title}}" class="img-responsive">
-                    </div>loadImage(slid.contentMap[1])
+                        <img ng-src="{{'/uploads/' + contentMap[slid.id].fileName}}" alt="{{contentMap.payload[slid.contentMap[1]].title}}" class="img-responsive">
+                    </div>
                 </div>
             </div>
             <!-- *************   CENTER PANEL  *************-->

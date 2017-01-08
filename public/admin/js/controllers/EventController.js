@@ -19,7 +19,6 @@ function eventCrtFnt($scope, $log, $window, factory, comm) {
         .then((payload) => payload.data)
         .then(
         (data) => {
-            debugger;
             $scope.presentationMap.payload = data;
             $scope.currentPresenation = data;
         })
@@ -29,9 +28,7 @@ function eventCrtFnt($scope, $log, $window, factory, comm) {
         .then((payload) => payload.data)
         .then(
         (data) => {
-            debugger;
-            $scope.contentMap.payload = data;
-            $scope.contentMap.array = factory.mapToArray(data);
+            $scope.contentMap = data;
         })
         .catch((errorPayload) => $log.error('failure loading movie', errorPayload));
 

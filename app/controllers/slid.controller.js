@@ -77,7 +77,7 @@ class SlidController {
         slid.type = request.file.mimetype;
         slid.id = request.file.filename.split('.')[0];
         slid.title = 'CPE < 7k';
-        slid.filename = request.file.filename;
+        slid.fileName = request.file.filename;
         fs.readFile(request.file.path, (err, data) => {
             if (err) console.log(err);
             slid.setData(data);
