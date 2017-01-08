@@ -14,6 +14,8 @@ function eventCrtFnt($scope, $log, $window, factory, comm) {
     $scope.presentationMap = {};
     $scope.presentationMap.payload = "";
 
+    $scope.currentImage = "";
+
 
     comm.loadPres('test')
         .then((payload) => payload.data)
@@ -52,6 +54,9 @@ function eventCrtFnt($scope, $log, $window, factory, comm) {
 
     $scope.selectCurrentSlid = function (slide) {
         $scope.currentSlide = slide;
+        let contentArray = Object.keys($scope.contentMap).map((key) => $scope.contentMap[key]);
+        $scope.currentImage = '/uploads/' + 
+            contentArray.filter((content) => content.id === slide.contentMap[1])[0].fileName;
 
     };
 
@@ -66,8 +71,14 @@ function eventCrtFnt($scope, $log, $window, factory, comm) {
             // $scope.currentSlide.contentMap[1] = data.id;
             console.log(data);
             $scope.contentMap[$scope.currentSlide.id].fileName = data.fileName;
+            let contentArray = Object.keys($scope.contentMap).map((key) => $scope.contentMap[key]);
+            
+            $scope.currentImage = '/uploads/' + 
+                contentArray.filter((content) => content.id === $scope.currentSlide.contentMap[1])[0].fileName;
+
             comm.uploadImage($scope.currentPresenation.id, $scope.currentSlide.id, data.id);
             //needed to inform angular that a change occurred on the current variable, this fire an event change
+            
             $scope.$apply();
             console.log("drop success, data:", data);
         }

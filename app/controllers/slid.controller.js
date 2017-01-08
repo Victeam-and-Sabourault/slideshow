@@ -87,7 +87,7 @@ class SlidController {
         fs.readFile(request.file.path, (err, data) => {
             if (err) console.log(err);
             slid.setData(data);
-            SlidModel.create(slid, () => response.send(null, "File uploaded"));
+            SlidModel.create(slid, () => response.send("File uploaded"));
         });
     }
 

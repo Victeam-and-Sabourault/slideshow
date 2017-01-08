@@ -44,13 +44,13 @@
             <!-- *************   CENTER PANEL  *************-->
             <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 zeroRef fullScreenHeight">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button ng-click="" type="button" class="btn btn-default"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></button>
-                        <button ng-click="" type="button" class="btn btn-default"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
-                        <button ng-click="" type="button" class="btn btn-default"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                        <button ng-click="" type="button" class="btn btn-default"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
-                        <button ng-click="" type="button" class="btn btn-default"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
-                        <button ng-click="" type="button" class="btn btn-default"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></button>
+                    <div class="btn-group" role="group" aria-label="..." ng-controller="playerCtrl">
+                        <button ng-click="emitBegin()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></button>
+                        <button ng-click="emitPrev()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
+                        <button ng-click="emitStart()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+                        <button ng-click="emitPause()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
+                        <button ng-click="emitNext()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
+                        <button ng-click="emitEnd()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></button>
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@
                         <textarea rows="5" type="text" ng-model="currentSlide.txt" class="form-control" id="currentSlideText"></textarea>
                     </div>
                     <div ng-drop="true" ng-drop-success="onDropComplete($data,$event)" style="min-height: 100px;min-width: 100px;background-color: #ddd;">
-                        <img ng-if="currentSlide != null" ng-src="{{ '/uploads/' + contentMap[currentSlide.id].fileName}}" alt="{{contentMap.payload[currentSlide.contentMap[1]].title}}" class="img-responsive">
+                        <img ng-if="currentSlide != null" ng-src="{{ currentImage }}" alt="{{contentMap.payload[currentSlide.contentMap[1]].title}}" class="img-responsive">
                     </div>
                 </div>
             </div>

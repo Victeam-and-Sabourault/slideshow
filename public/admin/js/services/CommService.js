@@ -69,12 +69,12 @@ function commFnc($http, $q) {
         socket.on('connection', function () {
             socket.emit('data_comm', { 'id': comm.io.uuid });
         });
-        socket.on('newPres', function (socket) {
+        // socket.on('newPres', function (socket) {
 
-        });
-        socket.on('slidEvent', function (socket) {
-
-        });
+        // });
+        // socket.on('slid', function (socket) {
+            
+        // });
         return socket;
     }
 
