@@ -25,7 +25,12 @@ router.route("/slids")
         });
     })
     // get all slids
-    .get((request, response) => SlidCtrl.list(data => response.send(data)));
+    .get((request, response) => { 
+        SlidCtrl.list((err, data) => {
+            if (err) console.log(err);
+            response.send(err || data);
+        });
+    });
 
 router.route("/slids/:slidId")
     // get 1 slid

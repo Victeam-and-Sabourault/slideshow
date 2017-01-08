@@ -19,18 +19,14 @@ class SlidController {
 
             for (let i in extFile) {
                 const url = CONFIG.contentDirectory + '/' + extFile[i];
-                if (fs.existsSync(url)) {
-                    fs.readFile(url, (err, data) => {
-                        const fileContent = JSON.parse(data.toString());
-                        listSlids[fileContent.id] = fileContent;
+                utils.readFileIfExists(url, (err, data) => {
+                    const fileContent = JSON.parse(data.toString());
+                    listSlids[fileContent.id] = fileContent;
 
-                        if (++nbFile === nbTotalFiles) { // no more files to read
-                            next(null, listSlids);
-                        }
-                    });
-                } else {
-                    next('File not found', null);
-                }
+                    if (++nbFile === nbTotalFiles) { // no more files to read
+                        next(null, listSlids);
+                    }
+                });
             }
         });
     }
@@ -44,22 +40,19 @@ class SlidController {
 
         fs.readdir(CONFIG.contentDirectory, (err, files) => {
             const file = files.filter((file) => file === model.fileName)[0];
-            if (fs.existsSync(CONFIG.contentDirectory + '/' + file)) {
-                fs.readFile(CONFIG.contentDirectory + '/' + file, (err, data) => {
-                    if (err) {
-                        next(err, null);
-                    } else {
-                        model.setData(data);
-                        // create a new slid from model
-                        SlidModel.create(model, err => {
-                            if (err) next(err, null);
-                            next(null, "Saved!");
-                        });
-                    }
-                });
-            } else {
-                next({});
-            }
+            const url = CONFIG.contentDirectory + '/' + file;
+            utils.readFileIfExists(url, (err, data) => {
+                if (err) {
+                    next(err, null);
+                } else {
+                    model.setData(data);
+                    // create a new slid from model
+                    SlidModel.create(model, err => {
+                        if (err) next(err, null);
+                        next(null, "Saved!");
+                    });
+                }
+            });
         });
     }
 
