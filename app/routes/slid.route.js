@@ -1,7 +1,5 @@
 const express = require('express');
-const fs = require('fs');
 const multer = require('multer');
-const path = require('path');
 const utils = require('../utils/utils');
 
 const SlidCtrl = require('../controllers/slid.controller.js');
