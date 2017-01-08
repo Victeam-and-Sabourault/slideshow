@@ -43,12 +43,9 @@
       myDropzone.on("queuecomplete", function(progress) {
         myDropzone.removeAllFiles(true);
         comm.loadImages('test')
-            .then(
-                (payload) => { 
-                    $scope.$parent.contentMap.payload = payload;
-                    $scope.$parent.contentMap.array=factory.mapToArray(payload);
-                })
-            .catch((errorPayload) => $log.error('failure loading movie', errorPayload));
+            .then(payload => payload.data)
+            .then(data => $scope.$parent.contentMap = data)
+            .catch(errorPayload => $log.error('failure loading movie', errorPayload));
       });
         
 

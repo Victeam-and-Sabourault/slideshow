@@ -5,6 +5,8 @@ function commFnc($http,$q ){
 
      var comm = {
          loadImages: loadImages,
+         loadAllImages: loadAllImages,
+         uploadImage: uploadImage,
          loadPres: loadPres,
          savePres: savePres
      };
@@ -12,6 +14,16 @@ function commFnc($http,$q ){
    function loadImages(presID) { 
        var deferred = $q.defer();
        $http.get('/pres/'+presID+'/images')
+            .then(
+                (data, status, headers, config) => deferred.resolve(data))
+            .catch(
+                (data, status, headers, config) => deferred.reject(status));
+       return deferred.promise;
+    }
+
+    function loadAllImages() {
+        var deferred = $q.defer();
+       $http.get('/uploads')
             .then(
                 (data, status, headers, config) => deferred.resolve(data))
             .catch(
@@ -27,6 +39,16 @@ function commFnc($http,$q ){
             .catch(
                 (data, status, headers, config) => deferred.reject(status));
         return deferred.promise;
+    }
+
+    function uploadImage(presID, slidID, file) {
+        var deferred = $q.defer();
+       $http.post(`/pres/${presID}/slid/${slidID}/upload/${file}`)
+            .then(
+                (data, status, headers, config) => deferred.resolve(data))
+            .catch(
+                (data, status, headers, config) => deferred.reject(status));
+       return deferred.promise;
     }
 
      //TODO

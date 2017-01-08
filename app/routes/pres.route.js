@@ -43,6 +43,25 @@ router.route("/loadPres/:presId")
 
     });
 
+router.route('/uploads')
+    // get all uploads
+    .get((request, response) => {
+        fs.readdir('./' + CONFIG.contentDirectory, (err, files) => {
+            if (err) console.log(err);
+            let listUploads = [];
+            let filteredLs = files.filter((file) => path.extname(file) === ".json");
+            let index = 0;
+
+            filteredLs.forEach(file => {
+                fs.readFile("./" + CONFIG.contentDirectory + "/" + file, 'utf8', function (err, data) {
+                    let jsonData = JSON.parse(data.toString());
+                    listUploads.push(jsonData);
+                    if (++index === filteredLs.length) response.send(listUploads);
+                });
+            });
+        });
+    });
+
 router.route('/pres/:presId/images')
     // get all images from a pres
     .get((request, response) => {

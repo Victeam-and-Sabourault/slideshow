@@ -63,16 +63,31 @@ class SlidController {
         });
     }
 
+    updateImage(presId, slidId, file, next) {
+        console.log(file);
+        if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + presId + ".pres.json")) {
+            fs.readFile("./" + CONFIG.presentationDirectory + "/" + presId + ".pres.json", 'utf8', function (err, data) {
+                let pres = JSON.parse(data.toString());
+                pres.slidArray = pres.slidArray.map((slid) => {
+                    if (slid.id === slidId) {
+                        slid.contentMap[1] = file;
+                    }
+                    return slid;
+                });
+                console.log(pres);
+                fs.writeFile(CONFIG.presentationDirectory + '/' + presId + '.pres.json', JSON.stringify(pres));
+                next();
+            });
+        } else {
+            next();
+        }
+    }
+
     read(id, next) {
         slidModel.read(id, next);
     }
 
     upload (request, response) {
-        console.log(request);
-        console.log(request.file.path); // The full path to the uploaded file
-        console.log(request.file.originalname); // Name of the file on the user's computer
-        console.log(request.file.mimetype); // Mime type of the file });
-
         let slid = new slidModel();
         slid.type = request.file.mimetype;
         slid.id = request.file.filename.split('.')[0];

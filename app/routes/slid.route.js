@@ -40,8 +40,25 @@ router.route("/slids/:slidId")
         });
     });
 
+router.route('/pres/:presId/slid/:slidId/upload/:fileId')
+    // update content
+    .post((request, response) => {
+        slidCtrl.updateImage(request.presId, request.slidId, request.fileId, (err, data) => {
+            if (err) console.log(err);
+            response.send(err || data);
+        });
+    });
+
 router.param("slidId", (req, res, next, id) => {
     req.slidId = id;
+    next();
+});
+router.param("presId", (req, res, next, id) => {
+    req.presId = id;
+    next();
+});
+router.param("fileId", (req, res, next, id) => {
+    req.fileId = id;
     next();
 });
 
