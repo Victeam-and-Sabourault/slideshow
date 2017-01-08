@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const utils = require('../utils/utils');
 
-const slidModel = require('../models/slid.model');
+const SlidModel = require('../models/slid.model');
 const CONFIG = require('../../config.json');
 
 class SlidController {
@@ -25,18 +25,18 @@ class SlidController {
                         listSlids[fileContent.id] = fileContent;
 
                         if (++nbFile === nbTotalFiles) { // no more files to read
-                            next(listSlids);
+                            next(null, listSlids);
                         }
                     });
                 } else {
-                    next({});
+                    next('File not found', null);
                 }
             }
         });
     }
 
     static create(file, next) {
-        let model = new slidModel();
+        let model = new SlidModel();
         model.type = utils.getFileType(file.mimetype);
         model.fileName = file.filename;
         model.id = model.fileName.split('.')[0];
@@ -47,13 +47,13 @@ class SlidController {
             if (fs.existsSync(CONFIG.contentDirectory + '/' + file)) {
                 fs.readFile(CONFIG.contentDirectory + '/' + file, (err, data) => {
                     if (err) {
-                        next(err);
+                        next(err, null);
                     } else {
                         model.setData(data);
                         // create a new slid from model
-                        slidModel.create(model, err => {
-                            if (err) next(err);
-                            next("Saved!");
+                        SlidModel.create(model, err => {
+                            if (err) next(err, null);
+                            next(null, "Saved!");
                         });
                     }
                 });
@@ -64,7 +64,6 @@ class SlidController {
     }
 
     static updateImage(presId, slidId, file, next) {
-        console.log(file);
         if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + presId + ".pres.json")) {
             fs.readFile("./" + CONFIG.presentationDirectory + "/" + presId + ".pres.json", 'utf8', function (err, data) {
                 let pres = JSON.parse(data.toString());
@@ -74,21 +73,20 @@ class SlidController {
                     }
                     return slid;
                 });
-                console.log(pres);
                 fs.writeFile(CONFIG.presentationDirectory + '/' + presId + '.pres.json', JSON.stringify(pres));
-                next();
+                next(null, "Image updated");
             });
         } else {
-            next();
+            next('Pres not found', null);
         }
     }
 
     static read(id, next) {
-        slidModel.read(id, next);
+        SlidModel.read(id, next);
     }
 
     static upload (request, response) {
-        let slid = new slidModel();
+        let slid = new SlidModel();
         slid.type = request.file.mimetype;
         slid.id = request.file.filename.split('.')[0];
         slid.title = 'CPE < 7k';
@@ -96,7 +94,7 @@ class SlidController {
         fs.readFile(request.file.path, (err, data) => {
             if (err) console.log(err);
             slid.setData(data);
-            slidModel.create(slid, () => response.send("File uploaded"));
+            SlidModel.create(slid, () => response.send(null, "File uploaded"));
         });
     }
 

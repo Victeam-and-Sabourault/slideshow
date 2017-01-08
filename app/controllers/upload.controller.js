@@ -18,7 +18,7 @@ class UploadController {
                 fs.readFile("./" + CONFIG.contentDirectory + "/" + file, 'utf8', function (err, data) {
                     let jsonData = JSON.parse(data.toString());
                     listUploads.push(jsonData);
-                    if (++index === filteredLs.length) next(listUploads);
+                    if (++index === filteredLs.length) next(null, listUploads);
                 });
             });
         });

@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const PresModel = require('../models/pres.model');
 const SlidCtrl = require('./slid.controller');
 const CONFIG = require('../../config.json');
 
@@ -24,7 +25,7 @@ class PresController {
                     listPres.push(pres);
 
                     if (++index === filteredLs.length) {
-                        next(listPres);
+                        next(null, listPres);
                     }
                 });
             });
@@ -32,14 +33,7 @@ class PresController {
     }
 
     static read(id, next) {
-        if (fs.existsSync("./" + CONFIG.presentationDirectory + "/" + id + ".pres.json")) {
-            fs.readFile("./" + CONFIG.presentationDirectory + "/" + id + ".pres.json", 'utf8', function (err, data) {
-                if (err) console.log(err);
-                next(data);
-            });
-        } else {
-            next();
-        }
+        PresModel.read(id, next)
     }
 
     static create(request, response) {
@@ -51,11 +45,11 @@ class PresController {
         });
 
         request.on('end', function () {
-
-            const post = JSON.parse(body);
-            fs.writeFile("./" + CONFIG.presentationDirectory + "/" + post.id + ".pres.json", JSON.stringify(post), () => {
-                response.send("Présentation Sauvegardé");
-            });
+            const pres = JSON.parse(body);
+            PresModel.create(pres, (err, data) => {
+                if (err) console.log(err);
+                response.send(err || data);
+            })
         });
     }
 
@@ -69,12 +63,12 @@ class PresController {
                     SlidCtrl.read(listSlids[slid].contentMap[1], (err, data) => {
                         if (err) console.log(err);
                         listUploads[listSlids[slid].id] = data;
-                        if (++index == listSlids.length) next(listUploads);
+                        if (++index == listSlids.length) next(null, listUploads);
                     });
                 }
             });
         } else {
-            next();
+            next('Pres Not found', null);
         }
     }
 
