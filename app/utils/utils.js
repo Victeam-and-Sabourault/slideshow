@@ -5,6 +5,12 @@ const path = require("path");
 const CONFIG = require('../../config.json');
 
 module.exports = {
+
+	handleReq (err, data) {
+	    if (err) console.log(err);
+	    response.send(err || data);
+	},
+
 	generateUUID () {
 		var d = new Date().getTime();
 		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

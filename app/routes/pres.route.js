@@ -3,30 +3,22 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const utils = require('../utils/utils');
 
 const PresCtrl = require('../controllers/pres.controller');
 const CONFIG = require('../../config.json');
 
 let router = express.Router();
 
-router.get("/loadPres", (request, response) => PresCtrl.list((err, data) => {
-    if (err) console.log(err);
-    response.send(err || data);
-}));
+router.get("/loadPres", (request, response) => PresCtrl.list((err, data) => utils.handleReq(err, data)));
 
 router.route("/loadPres/:presId")
     // get 1 pres
-    .get((request, response) => PresCtrl.read(request.presId, (err, data) => {
-        if (err) console.log(err);
-        response.send(err || data);
-    }));
+    .get((request, response) => PresCtrl.read(request.presId, (err, data) => utils.handleReq(err, data)));
 
 router.route('/pres/:presId/images')
     // get all images from a pres
-    .get((request, response) => PresCtrl.getAllImages(request.presId, (err, data) => {
-        if (err) console.log(err);
-        response.send(err || data);
-    }));
+    .get((request, response) => PresCtrl.getAllImages(request.presId, (err, data) => utils.handleReq(err, data)));
 
 router.post("/savePres", (request, response) => PresCtrl.create(request, response));
 

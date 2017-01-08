@@ -19,10 +19,7 @@ const upload = multer({ storage: storage });
 router.route("/slids")
     // create slid
     .post(upload.single("file"), (request, response) => {
-        SlidCtrl.create(request.file, (err, data) => {
-            if (err) console.log(err);
-            response.send(err || data);
-        });
+        SlidCtrl.create(request.file, (err, data) => utils.handleReq(err, data));
     })
     // get all slids
     .get((request, response) => { 
@@ -35,19 +32,13 @@ router.route("/slids")
 router.route("/slids/:slidId")
     // get 1 slid
     .get((request, response) => {
-        SlidCtrl.read(request.slidId, (err, data) => {
-            if (err) console.log(err);
-            response.send(err || data);
-        });
+        SlidCtrl.read(request.slidId, (err, data) => utils.handleReq(err, data));
     });
 
 router.route('/pres/:presId/slid/:slidId/upload/:fileId')
     // update content
     .post((request, response) => {
-        SlidCtrl.updateImage(request.presId, request.slidId, request.fileId, (err, data) => {
-            if (err) console.log(err);
-            response.send(err || data);
-        });
+        SlidCtrl.updateImage(request.presId, request.slidId, request.fileId, (err, data) => utils.handleReq(err, data));
     });
 
 router.param("slidId", (req, res, next, id) => {
